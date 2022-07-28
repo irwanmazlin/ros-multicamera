@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+
+<launch>
+
+    <include file="$(find realsense2_camera)/launch/rs_multiple_devices.launch">
+        <!-- <arg name="align_depth" value="true"/> -->
+    </include>
+
+    <node name="object_detection_ssd1" pkg="detecttrack" type="object_detection_ssd" output="screen">
+        <param name="image_input"     value="/camera2/color/image_raw"/>
+        <param name="object_output"    value="/object_detection1/results" />
+        <param name="image_output"    value="/object_detection1/image" />
+        <remap from="/object_detection/input_depth" to="/camera1/aligned_depth_to_color/image_raw" />
+        <remap from="/object_detection/camera_info" to="/camera1/aligned_depth_to_color/camera_info" />
+        <param name="threshold"         value="0.5" />
+        <param name="target"            value="CPU" />
+        <param name="network_path"     value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.xml" />
+        <param name="weights_path"     value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.bin" />
+        <param name="labels_path"      value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.labels" />
+        <param name="colors_path"      value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.colors" />
+        <param name="output_as_image"   value="true" />
+        <param name="output_as_list"    value="true" />
+        <param name="depth_analysis"    value="true" />
+        <param name="output_as_markers" value="true" />
+        <param name="output_as_makerslabel" value="true" />
+        <param name="output_as_boxlist" value="false" />
+    </node>
+
+    <!-- <node name="object_detection_ssd2" pkg="detecttrack" type="object_detection_ssd" output="screen">
+        <param name="image_input"     value="/camera1/color/image_raw"/>
+        <param name="object_output"    value="/object_detection2/results" />
+        <param name="image_output"    value="/object_detection2/image" />
+        <remap from="/object_detection/input_depth" to="/camera1/aligned_depth_to_color/image_raw" />
+        <remap from="/object_detection/camera_info" to="/camera1/aligned_depth_to_color/camera_info" />
+        <param name="threshold"         value="0.5" />
+        <param name="target"            value="CPU" />
+        <param name="network_path"     value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.xml" />
+        <param name="weights_path"     value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.bin" />
+        <param name="labels_path"      value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.labels" />
+        <param name="colors_path"      value="$(find detection)/models/FP16/mobilenet-ssd/mobilenet-ssd.colors" />
+        <param name="output_as_image"   value="true" />
+        <param name="output_as_list"    value="true" />
+        <param name="depth_analysis"    value="true" />
+        <param name="output_as_markers" value="true" />
+        <param name="output_as_makerslabel" value="true" />
+        <param name="output_as_boxlist" value="false" />
+    </node>
+ -->
+
+
+
+
+<!-- 
+    <node name="multi_kf_tracker" pkg="ros_vino" type="multi_kf_tracker">
+        <param name="topic_image_input"         value="/camera/color/image_raw" />
+        <param name="topic_objects_input"       value="/object_detection/results" />
+        <param name="topic_image_output"        value="/object/image_tracked" />
+        <param name="topic_objects_output"      value="/object/tracked_objects" />
+        <param name="min_correspondence_cost"   value="100.0" />
+        <param name="p_loop_rate"               value="30.0" />
+        <param name="p_tracking_duration"       value="0.5" />
+        <param name="p_sampling_time"           value="30.0" />
+        <param name="p_process_variance"        value="1.0" />
+        <param name="p_process_rate_variance"   value="10.0" />
+        <param name="p_measurement_variance"    value="10000.0" />
+    </node> -->
+
+    <node name="rviz" pkg="rviz" args="-d $(find detecttrack)/rviz/demo.rviz" type="rviz"/>
+</launch>
+
+<!-- python generate_tfrecord.py --path_to_images ../data/raccoon_data/train/images --path_to_annot ../data/raccoon_data/train_labels.csv --path_to_label_map ../models/raccoon_labelmap.pbtxt --path_to_save_tfrecords ../data/raccoon_data/train.record -->

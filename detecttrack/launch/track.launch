@@ -1,0 +1,20 @@
+<launch>
+
+
+    <node name="multi_kf_tracker" pkg="ros_vino" type="multi_kf_tracker">
+        <param name="image_input"         value="/camera/color/image_raw" />
+        <param name="objects_input"       value="/object_detection/results" />
+        <param name="image_output"        value="/camera/image_tracked" />
+        <param name="objects_output"      value="/camera/tracked_objects" />
+        <param name="min_correspondence_cost"   value="100.0" />
+        <param name="p_loop_rate"               value="30.0" />
+        <param name="p_tracking_duration"       value="0.5" />
+        <param name="p_sampling_time"           value="30.0" />
+        <param name="p_process_variance"        value="1.0" />
+        <param name="p_process_rate_variance"   value="10.0" />
+        <param name="p_measurement_variance"    value="10000.0" />
+    </node>
+
+    
+
+</launch>
